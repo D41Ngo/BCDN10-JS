@@ -89,7 +89,7 @@ var sinhVien3 = {
 
 console.log("global this", this); // Bên ngoài phạm vi global this = Đối tượng Window.
 
-sinhVien3.tinhDiemTrungBinh();
+sinhVien3["tinhDiemTrungBinh"]();
 sinhVien3.hienThiThongTin();
 
 // ===========================
@@ -130,8 +130,108 @@ function HocVien(ten, tuoi) {
 }
 
 // Dùng từ khóa new LopDoiTuong() để tạo ra một đối tượng.
+
+/**
+ * HocVien: lớp đối tượng.
+ * phu, dai: instance của lớp đối tượng hay là object (đối tượng).
+ */
 var phu = new HocVien("Phu", "23");
 var dai = new HocVien("Dai", "24");
 
 console.log("phu:", phu);
 console.log("dai:", dai);
+
+// ===========================
+/**
+ * Đối tượng (Object) giúp chúng ta đưa hay tổ chức giá trị về đúng nơi của nó.
+ * lớp đối tượng: tổ chức cấu trúc một đối tượng. Tượng trưng cho các đối tượng giống nhau về thuộc tính hay phương thức.
+ */
+
+var iphone = {
+  name: "Iphone 15", // lấy giá trị
+  camera: "12mb",
+  rom: "128g",
+  ram: "8g",
+
+  chupAnh: function () {
+    console.log("Tách tách tách ...");
+  },
+  quayVideo: function () {
+    console.log("Đang quay video ...");
+  },
+
+  hienThiThong: function () {
+    // this === đối tượng của chúng ta,
+    // this chính là chủ sở hữu của function này.
+    console.log("name: ", this.name);
+    console.log("camera: ", this["camera"]);
+  },
+};
+// Gọi method hienThiThong của đối tượng iphone
+iphone.hienThiThong();
+
+// var iphone = {
+//   name: "Iphone 16", // lấy giá trị
+//   camera: "14mb",
+//   rom: "256g",
+//   ram: "12g",
+
+//   chupAnh: function () {
+//     console.log("Tách tách tách ...");
+//   },
+//   quayVideo: function () {
+//     console.log("Đang quay video ...");
+//   },
+
+//   hienThiThong: function () {
+//     // this === đối tượng của chúng ta,
+//     // this chính là chủ sở hữu của function này.
+//     console.log("name: ", this.name);
+//     console.log("camera: ", this["camera"]);
+//   },
+// };
+
+function Iphone(name, camera, rom, ram) {
+  // Tạo ra thuộc tính => this.tenThuocTinh
+  this.name = name;
+  this.camera = camera;
+  this.rom = rom;
+  this.ram = ram;
+
+  this.chupAnh = function () {
+    console.log("Tách tách tách ...");
+  };
+  this.quayVideo = function () {
+    console.log("Đang quay video ...");
+  };
+
+  this.hienThiThongTin = function () {
+    // console.log("name: ", iphone16.name); ❌
+    // console.log("name: ", Iphone.name); ❌
+
+    console.log(this); // Chính là đối tượng mà các bạn tạo ra từ lớp đối tượng này.
+    // this là instance của lớp đối tượng.
+
+    console.log("name: ", this.name);
+    console.log("camera: ", this["camera"]);
+  };
+}
+
+// Tạo đối tượng từ lớp đối tượng.
+// Tạo đối tượng vừa gán giá trị mặc định cho thuộc tính của đối tượng đó.
+var iphone16 = new Iphone("Iphone 16", "20mb", "256g", "10g");
+var iphone17 = new Iphone("Iphone 17", "20mb", "256g", "10g");
+
+iphone16.hienThiThongTin();
+iphone17.hienThiThongTin();
+
+// Ox111111111
+
+// console.log("trước", iphone16); // Ox111111111
+// Gán lại giá trị thuộc tính cho lớp đối tượng.
+// iphone16.name = "Iphone 16"; // Ox111111111.name = 'Iphone 16'
+// iphone16.camera = "20mb"; // Ox111111111.carema = "20mb"
+// iphone16.rom = "256g";
+// iphone16.ram = "10g";
+
+// console.log("sau", iphone16); // 0x111111111
