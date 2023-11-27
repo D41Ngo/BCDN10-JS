@@ -19,73 +19,74 @@
     <div class="container">
         <h1 class="text-center">Quản Lý Sinh Viên</h1>
         <main>
-            <!-- Input Thông Tin -->
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label class="form-label" for="msv">Mã Sinh Viên:</label>
-                        <input id="msv" type="text" class="form-control" placeholder="Mã sinh viên">
-                    </div>
+            <form>
+                <!-- Input Thông Tin -->
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="msv">Mã Sinh Viên:</label>
+                            <input id="msv" type="text" class="form-control" placeholder="Mã sinh viên">
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="email">Email:</label>
-                        <input id="email" type="email" class="form-control" placeholder="Mã sinh viên">
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email:</label>
+                            <input id="email" type="email" class="form-control" placeholder="Mã sinh viên">
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="ngaySinh">Ngày Sinh:</label>
-                        <input id="ngaySinh" type="date" class="form-control" placeholder="Mã sinh viên">
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="ngaySinh">Ngày Sinh:</label>
+                            <input id="ngaySinh" type="date" class="form-control" placeholder="Mã sinh viên">
+                        </div>
 
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label class="form-label" for="tsv">Tên Sinh Viên:</label>
-                        <input id="tsv" type="text" class="form-control" placeholder="Mã sinh viên">
                     </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="tsv">Tên Sinh Viên:</label>
+                            <input id="tsv" type="text" class="form-control" placeholder="Mã sinh viên">
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="matKhau">Mật Khẩu:</label>
-                        <input id="matKhau" type="password" class="form-control" placeholder="Mã sinh viên">
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="matKhau">Mật Khẩu:</label>
+                            <input id="matKhau" type="password" class="form-control" placeholder="Mã sinh viên">
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label" for="khoaHoc">Khóa học:</label>
-                        <select id="khoaHoc" class="form-select">
-                            <option value="" selected>Hãy chọn khóa học</option>
-                            <option value="kh001">KH001</option>
-                            <option value="kh002">KH002</option>
-                            <option value="kh002">KH003</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <!-- Input Điểm -->
-            <div class="row">
-                <div class="col-4">
-                    <div class="mb-3">
-                        <label class="form-label" for="toan">Điểm Toán:</label>
-                        <input id="toan" type="text" class="form-control">
+                        <div class="mb-3">
+                            <label class="form-label" for="khoaHoc">Khóa học:</label>
+                            <select id="khoaHoc" class="form-select">
+                                <option value="" selected>Hãy chọn khóa học</option>
+                                <option value="kh001">KH001</option>
+                                <option value="kh002">KH002</option>
+                                <option value="kh002">KH003</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="mb-3">
-                        <label class="form-label" for="ly">Điểm Lý:</label>
-                        <input id="ly" type="text" class="form-control">
+                <!-- Input Điểm -->
+                <div class="row">
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label class="form-label" for="toan">Điểm Toán:</label>
+                            <input id="toan" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label class="form-label" for="ly">Điểm Lý:</label>
+                            <input id="ly" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label class="form-label" for="hoa">Điểm Hóa:</label>
+                            <input id="hoa" type="text" class="form-control">
+                        </div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div class="mb-3">
-                        <label class="form-label" for="hoa">Điểm Hóa:</label>
-                        <input id="hoa" type="text" class="form-control">
-                    </div>
+
+                <div class="text-center">
+                    <button class="btn btn-success tsv">Thêm Sinh Viên</button>
                 </div>
-            </div>
-
-            <div class="text-center">
-                <button class="btn btn-success">Thêm Sinh Viên</button>
-            </div>
-
+            </form>
 
             <div class="mb-3">
                 <label class="form-label" for="tim-kiem-sv">Tìm kiếm sinh viên:</label>
@@ -132,7 +133,17 @@
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <!-- JS -->
+
+    <!-- Model -->
+    <!-- tao bien fullName -->
+    <script src="./src/model/sinh-vien.js"></script>
+    <script src="./src/model/list-sinh-vien.js"></script>
+
+    <!-- Main -->
+    <!-- su dung fullName -->
     <script src="./src/index.js"></script>
+
+
 </body>
 
 </html>
