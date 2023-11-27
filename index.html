@@ -22,40 +22,40 @@
             <!-- Input Thông Tin -->
             <div class="row">
                 <div class="col-6">
-                    <div class="input-group mb-3 flex-column">
-                        <label for="msv">Mã Sinh Viên:</label>
-                        <input id="msv" type="text" class="w-100 form-control" placeholder="Mã sinh viên">
+                    <div class="mb-3">
+                        <label class="form-label" for="msv">Mã Sinh Viên:</label>
+                        <input id="msv" type="text" class="form-control" placeholder="Mã sinh viên">
                     </div>
 
-                    <div class="input-group mb-3 flex-column">
-                        <label for="email">Email:</label>
-                        <input id="email" type="email" class="w-100 form-control" placeholder="Mã sinh viên">
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Email:</label>
+                        <input id="email" type="email" class="form-control" placeholder="Mã sinh viên">
                     </div>
 
-                    <div class="input-group mb-3 flex-column">
-                        <label for="ngaySinh">Ngày Sinh:</label>
-                        <input id="ngaySinh" type="date" class="w-100 form-control" placeholder="Mã sinh viên">
+                    <div class="mb-3">
+                        <label class="form-label" for="ngaySinh">Ngày Sinh:</label>
+                        <input id="ngaySinh" type="date" class="form-control" placeholder="Mã sinh viên">
                     </div>
 
                 </div>
                 <div class="col-6">
-                    <div class="input-group mb-3 flex-column">
-                        <label for="tsv">Tên Sinh Viên:</label>
-                        <input id="tsv" type="text" class="w-100 form-control" placeholder="Mã sinh viên">
+                    <div class="mb-3">
+                        <label class="form-label" for="tsv">Tên Sinh Viên:</label>
+                        <input id="tsv" type="text" class="form-control" placeholder="Mã sinh viên">
                     </div>
 
-                    <div class="input-group mb-3 flex-column">
-                        <label for="matKhau">Mật Khẩu:</label>
-                        <input id="matKhau" type="password" class="w-100 form-control" placeholder="Mã sinh viên">
+                    <div class="mb-3">
+                        <label class="form-label" for="matKhau">Mật Khẩu:</label>
+                        <input id="matKhau" type="password" class="form-control" placeholder="Mã sinh viên">
                     </div>
 
-                    <div class="input-group mb-3 flex-column">
-                        <label for="khoaHoc">Khóa học:</label>
-                        <select id="khoaHoc" class="w-100 form-select">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                    <div class="mb-3">
+                        <label class="form-label" for="khoaHoc">Khóa học:</label>
+                        <select id="khoaHoc" class="form-select">
+                            <option value="" selected>Hãy chọn khóa học</option>
+                            <option value="kh001">KH001</option>
+                            <option value="kh002">KH002</option>
+                            <option value="kh002">KH003</option>
                         </select>
                     </div>
                 </div>
@@ -63,27 +63,36 @@
             <!-- Input Điểm -->
             <div class="row">
                 <div class="col-4">
-                    <div class="input-group mb-3 flex-column">
-                        <label for="toan">Điểm Toán:</label>
-                        <input id="toan" type="text" class="w-100 form-control">
+                    <div class="mb-3">
+                        <label class="form-label" for="toan">Điểm Toán:</label>
+                        <input id="toan" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col-4">
-                    <div class="input-group mb-3 flex-column">
-                        <label for="ly">Điểm Lý:</label>
-                        <input id="ly" type="text" class="w-100 form-control">
+                    <div class="mb-3">
+                        <label class="form-label" for="ly">Điểm Lý:</label>
+                        <input id="ly" type="text" class="form-control">
                     </div>
                 </div>
                 <div class="col-4">
-                    <div class="input-group mb-3 flex-column">
-                        <label for="hoa">Điểm Hóa:</label>
-                        <input id="hoa" type="text" class="w-100 form-control">
+                    <div class="mb-3">
+                        <label class="form-label" for="hoa">Điểm Hóa:</label>
+                        <input id="hoa" type="text" class="form-control">
                     </div>
                 </div>
             </div>
 
             <div class="text-center">
                 <button class="btn btn-success">Thêm Sinh Viên</button>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label" for="tim-kiem-sv">Tìm kiếm sinh viên:</label>
+                <div class="d-flex gap-4">
+                    <input id="tim-kiem-sv" type="text" class="form-control">
+                    <button class="btn btn-primary flex-shrink-0">Tìm kiếm</button>
+                </div>
             </div>
 
 
