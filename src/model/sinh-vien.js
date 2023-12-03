@@ -14,9 +14,9 @@ function SinhVien(
   this.ten = ten;
   this.khoaHoc = khoaHoc;
   this.ngay = ngay;
-  this.diemToan = diemToan;
-  this.diemLy = diemLy;
-  this.diemHoa = diemHoa;
+  this.diemToan = Number(diemToan);
+  this.diemLy = +diemLy;
+  this.diemHoa = +diemHoa;
   this.matKhau = matKhau;
 
   this.tinhDiemTrungBinh = function () {
@@ -25,7 +25,8 @@ function SinhVien(
     // this nó tượng trưng đối tượng là chủ của nó.
     const dtb = (this.diemHoa + this.diemLy + this.diemToan) / 3;
 
-    return dtb;
+    // 2 chữ số sau dấu phẩy: toFixed
+    return dtb.toFixed(2);
   };
 }
 
@@ -60,7 +61,8 @@ var fullName = "Nguyen Van B";
 
 // DOM:
 // đối tượng để mô tả file html -> document
-// đối tượng để mô tả -> window: share biến, function giữa các file js, html với nhau.
+// window: là một đối tượng global.
+// đối tượng để mô tả màn hình của trang web -> window: share biến, function giữa các file js, html với nhau.
 
-console.log("window.fullName", window.fullName);
-console.log("fullName", fullName);
+// console.log("window.fullName", window.fullName);
+// console.log("fullName", fullName);
