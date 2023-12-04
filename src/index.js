@@ -3,6 +3,9 @@
 // Vì sao không tạo nó ở bên trong hàm gắn cho onsubmit? vì để lưu trữ lại những sinh viên đã được lưu trước đó.
 var dssv = new ListSinhVien();
 
+// Tạo một biến lưu trạng thái để nhận diện form chúng ta đang thêm mới hay là đang chỉnh sửa
+var isEdit = false;
+
 // ==========
 var eleForm = document.querySelector("form");
 
@@ -10,6 +13,7 @@ eleForm.onsubmit = function (event) {
   // ngăn chặn reload lại trang, hành vi mặc định của thẻ form
   event.preventDefault();
 
+  debugger;
   /**
    * 1. Lấy tất cả các giá trị trên form.
    * 2. Tạo một đối tượng SinhVien
@@ -19,13 +23,12 @@ eleForm.onsubmit = function (event) {
    */
 
   var listEle = document.querySelectorAll(
-    ".form-sinh-vien input:not([disabled]),.form-sinh-vien select"
+    ".form-sinh-vien input:not([disabled]), .form-sinh-vien select, .form-sinh-vien input#msv"
   );
 
   console.log("listEle", listEle);
 
-  var maSinhVien, ten, email, matKhau, toan, ly, hoa, ngaySinh, khoaHoc;
-
+  // --------------------------
   var sv = {};
 
   listEle.forEach(function (ele) {
@@ -34,7 +37,6 @@ eleForm.onsubmit = function (event) {
     sv[thuocTinh] = ele.value;
   });
 
-  console.log("sv", sv);
   // Gõ đúng thứ tự tham số truyền vào để tránh nhầm thuộc tính.
   var sinhVien = new SinhVien(
     sv.msv,
@@ -47,10 +49,17 @@ eleForm.onsubmit = function (event) {
     sv.hoa,
     sv.matKhau
   );
-  // Kiểm tra xem thử tạo đúng giá trị hay chưa.
-  console.log("sinhVien", sinhVien);
   // lưu vào danhSachSinhVien
-  dssv.themSinhVien(sinhVien);
+
+  if (isEdit) {
+    updateSinhVien(sinhVien);
+  } else {
+    createSinhVien(sinhVien);
+  }
+  // --------------------------
+  // Cập nhật lại trạng thái button
+  renderButtonAction();
+  // --------------------------
 
   // luu vào localStorage
   luuDanhSachSinhVienLocal();
@@ -61,6 +70,25 @@ eleForm.onsubmit = function (event) {
   // render table
   renderTable();
 };
+
+// == Function Tạo mới sinh viên ==
+function createSinhVien(sinhVien) {
+  // Đôi khi chúng ta mong muốn xử lý thêm logic
+  dssv.themSinhVien(sinhVien);
+}
+
+// == Function Cập nhật sinh viên ==
+function updateSinhVien(sinhVien) {
+  // Đôi khi chúng ta mong muốn xử lý thêm logic
+  dssv.capNhatSinhVien(sinhVien);
+
+  // Sau khi update xong thì chuyển trạng thái form về dạng create
+  isEdit = false;
+
+  // Mở lại input msv cho người dùng nhập sau khi cập nhật
+  var inp = document.querySelector("input#msv");
+  inp.disabled = undefined;
+}
 // == Reload page ==
 /**
  * Chạy mỗi khi reload page
@@ -94,17 +122,24 @@ init();
 </td>
 </tr> */
 
-function renderTable() {
+function renderTable(danhSachSinhVien) {
   var eleHtml = ``;
 
   // Lặp qua mảng sinh viên để tạo mỗi sinh viên là mỗi thẻ tr
   // và cộng dồn nó vào eleHtml
   // (1)danhSachSinhVien: đối tượng
   // (2)danhSachSinhVien: thuộc tính.
-  console.log("danhSachSinhVien", dssv);
+
+  /**
+   * Nếu có giá trị undefined thì gán giá trị default cho nó.
+   * Ngược lại thì không.
+   */
+  if (!danhSachSinhVien) {
+    danhSachSinhVien = dssv.danhSachSinhVien;
+  }
 
   // f2 đổi tên toàn bộ biến.
-  dssv.danhSachSinhVien.forEach(function (sv) {
+  danhSachSinhVien.forEach(function (sv) {
     // Chúng ta không thể truyền trực tiếp giá trị object sv vào function inline được.
     eleHtml += `
         <tr>
@@ -154,7 +189,7 @@ function chinhSuaSinhVien(msv) {
 
 function renderDuLieuLenForm(sv) {
   var listEle = document.querySelectorAll(
-    ".form-sinh-vien input:not([disabled]),.form-sinh-vien select"
+    ".form-sinh-vien input:not([disabled]),.form-sinh-vien select, .form-sinh-vien input#msv"
   );
 
   var mapper = {
@@ -172,29 +207,56 @@ function renderDuLieuLenForm(sv) {
   /**
    * Dùng id để phân biệt được input nào cần lấy dữ liệu thuộc tính nào của đối tượng sv để render lên trên giao diện.
    */
+
   listEle.forEach(function (ele) {
     var thuocTinh = mapper[ele.id];
-    // if (ele.id === "msv") {
-    //   // ele.value = sv["maSinhVien"];
-
-    //   thuocTinh = "maSinhVien";
-    //   // thuocTinh = mapper[ele.id];
-    // }
-
-    // if (ele.id === "tsv") {
-    //   // ele.value = sv["ten"];
-    //   thuocTinh = "ten";
-    //   // thuocTinh = mapper[ele.id];
-    // }
-
-    // if (ele.id === "email") {
-    //   // ele.value = sv["email"];
-    //   thuocTinh = "email";
-    // }
 
     ele.value = sv[thuocTinh];
+
+    // Chặn không cho phép người dùng chỉnh sửa maSinhVien.
+    if (ele.id === "msv") {
+      ele.disabled = true;
+    }
   });
+
+  // Cập nhật trạng thái form
+  isEdit = true;
+  // render lại button
+  renderButtonAction();
 }
+
+// == Render Button Thêm - Sửa ==
+function renderButtonAction() {
+  // Lấy element button thêm sinh viên hay chỉnh sửa
+  var btn = document.querySelector("button.tsv");
+
+  if (isEdit) {
+    btn.innerHTML = "Cập nhật sinh viên";
+    // Thêm class vào có tên btn-primary
+    btn.classList.add("btn-primary");
+    // Xóa class có giá trị là btn-success
+    btn.classList.remove("btn-success");
+  } else {
+    btn.innerHTML = "Thêm sinh viên";
+    btn.classList.add("btn-success");
+    btn.classList.remove("btn-primary");
+  }
+}
+
+// == Tìm kiếm ==
+document.querySelector("button.search").onclick = function () {
+  const valueSearch = document.querySelector("input#tim-kiem-sv").value;
+
+  var danhSachSinhVienTimKiemDuoc = dssv.timKiemSinhVienTheoTen(valueSearch);
+
+  console.log("danhSachSinhVienTimKiemDuoc", danhSachSinhVienTimKiemDuoc);
+
+  // reset lại ô tìm kiếm
+  document.querySelector("input#tim-kiem-sv").value = "";
+
+  // render lại table danh sách sinh viên
+  renderTable(danhSachSinhVienTimKiemDuoc);
+};
 
 // == Fix tạm bug khi lưu vào local sẽ bị mất method tinhDiemTrungBinh ==
 function tinhDiemTrungBinh(sv) {
