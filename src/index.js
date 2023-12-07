@@ -13,7 +13,8 @@ eleForm.onsubmit = function (event) {
   // ngăn chặn reload lại trang, hành vi mặc định của thẻ form
   event.preventDefault();
 
-  debugger;
+  return;
+
   /**
    * 1. Lấy tất cả các giá trị trên form.
    * 2. Tạo một đối tượng SinhVien
@@ -258,6 +259,108 @@ document.querySelector("button.search").onclick = function () {
   renderTable(danhSachSinhVienTimKiemDuoc);
 };
 
+// == Validate ==
+/**
+ * Khi người dùng rời khỏi ô input thì chúng ta mới bắt đầu validate ô input vừa rời đi.
+ *  - onblur: để lắng nghe nếu người dùng vừa rồi ô input.
+ * Khi người dùng submit form.
+ *
+ *
+ * Lưu trữ tất cả ô input người dùng từng đi qua.
+ * var touches;
+ *
+ * Lưu các message lỗi của từng ô input.
+ * var errors;
+ *
+ * - Kiểm tra người dùng đã từng đi qua hay chưa và có message lỗi nào hay không để hiển thị error.
+ *
+ *
+ * Yêu cầu:
+ * - tất cả các trường đều yêu cầu bắt buộc nhập vào.
+ * - maSinhVien: toàn bộ là số.
+ * - email: phải đúng định dạng email
+ * - ten: Toàn bộ là ký tự.
+ * - matKhau: từ 6 ký tự trở lên
+ * - ly: số chạy từ 0 -> 10
+ * - hoa: số chạy từ 0 -> 10
+ * - toan: số chạy từ 0 -> 10
+ */
+// == Gắn sự kiện onblur cho tất cả ô input - để xem thử người dùng đã từng đi qua ô input đó hay chưa ==
+var touches = {
+  // maSinhVien: true,
+  // email: false,
+};
+
+var listEle = document.querySelectorAll(
+  ".form-sinh-vien input:not([disabled]), .form-sinh-vien select"
+);
+
+// Duyệt qua từng ô input và gắn thuộc tính onblur
+function handleBlur(event) {
+  // event.target: chính là ô input của chúng ta.
+  touches[event.target.id] = true; // true: đã từng đi qua ô input
+
+  console.dir(touches);
+
+  // Hiện errors mỗi khi người dùng blur khỏi ô input
+  renderErrors();
+}
+
+listEle.forEach(function (ele) {
+  ele.onblur = handleBlur;
+});
+// == Validate ==
+var errors = {
+  msv: "Yêu cầu bắt buộc nhập vào.",
+  tsv: "Yêu cầu bắt buộc nhập vào.",
+};
+
+// == Render error message ==
+function renderErrors() {
+  listEle.forEach(function (ele) {
+    // Kiểm tra ô input này có message lỗi hay không
+    // và có đã từng đi qua hay chưa.
+
+    // --
+
+    var thuocTinh = ele.id; // msv ten email
+
+    // Kiểm tra ô input có hợp lệ hay không để show message
+    // Hiện thị message khi nào:
+    // errors[thuocTinh]: có giá trị .length > 0 -> có giá trị. Nếu có giá trị thì nó sẽ là true. Nếu undefined hoặc empty string thì sẽ là false.
+    // touches[thuocTinh]: có giá trị true;
+
+    // Falsy: false, 0, '', undefined, null
+
+    // Bỏ qua chuyện ép kiểu về Boolean, vì js tự làm giúp chúng ta.
+    var isShow = errors[thuocTinh] && touches[thuocTinh];
+
+    if (!isShow) {
+      // Dừng chạy hàm, không show message
+      return;
+    }
+
+    // --
+
+    // Lấy ra element kế tiếp của input. chính là form-message
+    // Kiểm tra coi thử có hay chưa.
+    // Có rồi, thì chỉ thay đổi nội dung.
+    // Chưa, thì mình sẽ tạo mới nó.
+    var nextEle = ele.nextElementSibling;
+
+    var messageHTML = `
+                        <span class="form-message">
+                          Bắt buộc nhập vào.
+                        </span>`;
+    if (nextEle) {
+      nextEle.innerHTML = messageHTML;
+    } else {
+      // Tạo mới element form-message
+      ele.insertAdjacentHTML("afterend", messageHTML);
+    }
+  });
+}
+
 // == Fix tạm bug khi lưu vào local sẽ bị mất method tinhDiemTrungBinh ==
 function tinhDiemTrungBinh(sv) {
   const dtb = (sv.diemHoa + sv.diemLy + sv.diemToan) / 3;
@@ -320,3 +423,17 @@ obj[age] = 20;
 
 // console.log(obj);
 // ======================
+
+// primitive type | object type
+// |_ string           |_ array
+//                     |_ function
+//                     |_ object
+
+var length = "fasdfasdf".length;
+// 1> Chuyển về new String('fasdfasdf') => được quyền sử dụng length? được nếu như có thuộc tính.
+// 2> Khôi phục là biến string cho chúng ta. Không thay đổi hay can thiệp vào chuỗi của chúng ta.
+
+// Ẩn của js: coercion
+// new String("Abc").length;
+// new Number()
+// new Boolean()
