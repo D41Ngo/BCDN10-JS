@@ -109,6 +109,16 @@ function Validator(value) {
     return this;
   };
 
+  this.passWord = function (message) {
+    if (this.message) return this;
+    var regexPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    if (!regexPw.test(this.value)) {
+      this.message = message || "Ít nhất là 1 ký tự chữ và có 1 ký tự số";
+    }
+    return this;
+  };
+
   // method: getter
   this.getMessage = function () {
     return this.message;

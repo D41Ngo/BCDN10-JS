@@ -6,6 +6,10 @@ var dssv = new ListSinhVien();
 // Tạo một biến lưu trạng thái để nhận diện form chúng ta đang thêm mới hay là đang chỉnh sửa
 var isEdit = false;
 
+/**
+ * Người dùng nhập đẩy đủ -> submit
+ * Người dùng chưa nhập gì hết | chỉ nhập vài trường -> submit
+ */
 // ==========
 var eleForm = document.querySelector("form");
 
@@ -13,7 +17,10 @@ eleForm.onsubmit = function (event) {
   // ngăn chặn reload lại trang, hành vi mặc định của thẻ form
   event.preventDefault();
 
-  return;
+  if (isValid() === false) {
+    renderErrors();
+    return;
+  }
 
   /**
    * 1. Lấy tất cả các giá trị trên form.
@@ -286,14 +293,20 @@ document.querySelector("button.search").onclick = function () {
  * - toan: số chạy từ 0 -> 10
  */
 // == Gắn sự kiện onblur cho tất cả ô input - để xem thử người dùng đã từng đi qua ô input đó hay chưa ==
-var touches = {
-  // maSinhVien: true,
-  // email: false,
-};
+var touches = {};
 
 var listEle = document.querySelectorAll(
   ".form-sinh-vien input:not([disabled]), .form-sinh-vien select"
 );
+
+// Khởi tạo giá trị mặc định cho touches, khi init chương trình.
+setTouches(false);
+
+function setTouches(value) {
+  listEle.forEach(function (ele) {
+    touches[ele.id] = value;
+  });
+}
 
 // Duyệt qua từng ô input và gắn thuộc tính onblur
 function handleBlur(event) {
@@ -308,17 +321,107 @@ function handleBlur(event) {
 }
 // -- handleValidate --
 function handleValidate(event) {
-  errors[event.target.id] = "Hihihi";
+  var id = event.target.id;
+  var value = event.target.value;
+  switch (id) {
+    case "msv": {
+      errors[id] = new Validator(value).require().string().min(2).getMessage();
+      break;
+    }
+    case "tsv": {
+      errors[id] = new Validator(value)
+        .require()
+        .string()
+        .min(6)
+        .max(50)
+        .getMessage();
+      break;
+    }
+    case "email": {
+      errors[id] = new Validator(value).require().email().getMessage();
+      break;
+    }
+    case "matKhau": {
+      errors[id] = new Validator(value).require().passWord().getMessage();
+      break;
+    }
+    case "khoaHoc": {
+      errors[id] = new Validator(value).require().getMessage();
+      break;
+    }
+    case "ngaySinh": {
+      errors[id] = new Validator(value).require().getMessage();
+      break;
+    }
+    case "toan":
+    case "ly":
+    case "hoa": {
+      errors[id] = new Validator(value)
+        .require()
+        .number()
+        .min(0)
+        .max(10)
+        .getMessage();
+      break;
+    }
+    default:
+  }
+}
+
+// == isValid ==
+function isValid() {
+  // TH1: Nếu chưa nhập gì hết mà đã nhấn submit
+  // errors: vì nếu người dùng từng đi qua ô input thì errors mới có được những property
+
+  /**
+   * errors: vì ban đầu chưa nhập sẽ có giá trị rỗng {}, Object.values(errors).length === 0
+   *
+   * mỗi khi onblur thì errors mới có thêm 1 thuộc tính.
+   *
+   * Nếu mà người dùng đi qua hết tất cả ô input thì lúc này điều kiện mới trở nên sai
+   * Object.values(errors).length === listEle.length
+   */
+  if (Object.values(errors).length !== listEle.length) {
+    // set tất cả về true
+    setTouches(true);
+    // Lặp qua để set lại message lỗi của mỗi ô input
+    listEle.forEach(function (ele) {
+      handleValidate({
+        target: {
+          id: ele.id,
+          value: "",
+        },
+      });
+    });
+    return false;
+  }
+
+  // TH2: Đã nhập đầy đủ
+  // 1. Tất cả cả ô input đã từng đi qua
+  // 2. Không được có message lỗi
+  // => Cho phép submit
+
+  // Chỉ cần lấy giá trị để lặp qua.
+  // 1. Tất cả cả ô input đã từng đi qua: có giá trị true
+  // Sử dụng method every: Nếu tất cả có điều kiện đúng thì sẽ trả kết quả true.
+  var isTouch = Object.values(touches).every(function (item) {
+    return item;
+  });
+
+  // 2. Không được có message lỗi
+  var isMessage = Object.values(errors).every(function (item) {
+    // Nếu length = 0 thì không có lỗi
+    return item.length === 0;
+  });
+
+  return isTouch && isMessage;
 }
 
 listEle.forEach(function (ele) {
   ele.onblur = handleBlur;
 });
 // == Validate ==
-var errors = {
-  msv: "Yêu cầu bắt buộc nhập vào.",
-  tsv: "", // không có message thì không show lỗi
-};
+var errors = {};
 
 // == Render error message ==
 function renderErrors() {
@@ -340,7 +443,11 @@ function renderErrors() {
 
     // Bỏ qua chuyện ép kiểu về Boolean, vì js tự làm giúp chúng ta.
     // errors[thuocTinh] = "" && touches[thuocTinh] = true -> isShow = false
-    var isShow = errors[thuocTinh] && touches[thuocTinh];
+
+    // Nếu empty string thì vẫn show để loại bỏ message trước đó.
+    // undefined: khi mà người dùng chưa từng vào ô input.
+    debugger;
+    var isShow = errors[thuocTinh] != undefined && touches[thuocTinh];
 
     if (!isShow) {
       // Dừng chạy hàm, không show message
