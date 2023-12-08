@@ -301,9 +301,14 @@ function handleBlur(event) {
   touches[event.target.id] = true; // true: đã từng đi qua ô input
 
   console.dir(touches);
-
+  // Validate sau khi blur
+  handleValidate(event);
   // Hiện errors mỗi khi người dùng blur khỏi ô input
   renderErrors();
+}
+// -- handleValidate --
+function handleValidate(event) {
+  errors[event.target.id] = "Hihihi";
 }
 
 listEle.forEach(function (ele) {
@@ -312,7 +317,7 @@ listEle.forEach(function (ele) {
 // == Validate ==
 var errors = {
   msv: "Yêu cầu bắt buộc nhập vào.",
-  tsv: "Yêu cầu bắt buộc nhập vào.",
+  tsv: "", // không có message thì không show lỗi
 };
 
 // == Render error message ==
@@ -331,8 +336,10 @@ function renderErrors() {
     // touches[thuocTinh]: có giá trị true;
 
     // Falsy: false, 0, '', undefined, null
+    // Còn lại là truely
 
     // Bỏ qua chuyện ép kiểu về Boolean, vì js tự làm giúp chúng ta.
+    // errors[thuocTinh] = "" && touches[thuocTinh] = true -> isShow = false
     var isShow = errors[thuocTinh] && touches[thuocTinh];
 
     if (!isShow) {
@@ -350,7 +357,7 @@ function renderErrors() {
 
     var messageHTML = `
                         <span class="form-message">
-                          Bắt buộc nhập vào.
+                          ${errors[thuocTinh]}
                         </span>`;
     if (nextEle) {
       nextEle.innerHTML = messageHTML;
