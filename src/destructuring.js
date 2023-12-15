@@ -19,7 +19,7 @@ const listStudent = [
 // const stu_3 = listStudent[1];
 // -- destructuring --
 // const [stu_1, stu_2, stu_3] = listStudent;
-const [stu1, stu3, stu2] = listStudent;
+const [stu1, , stu2] = listStudent;
 
 // const age = stu1.age;
 // const name = stu1.name;
